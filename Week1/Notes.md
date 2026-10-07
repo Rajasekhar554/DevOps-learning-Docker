@@ -4,7 +4,7 @@ Docker is a containerisation platform that allows developers to pack their code,
 
 Beofre docker some memory wastage will happen , applications will run on dev env , QA when we run the same application in prod it won't run properly due to compatability issues.
 
-After docker meory sharing will happen and application will run consistently across any platform.
+After docker memory sharing will happen and application will run consistently across any platform.
 
 Docker is a cross platform and open source application.
 
