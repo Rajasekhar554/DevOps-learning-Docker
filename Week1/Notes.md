@@ -18,3 +18,18 @@ Docker Installation on ubuntu ::
 sudo apt update -y
 sudo apt install docker.io -y
 
+docker -v
+
+ps -ef | grep -i "dockerd"
+sudo systemctl satus docker
+
+sudo usermod -aG docker ubuntu
+
+docker ps
+
+Docker flow :: 
+
+DF -->DI --> DC
+
+Once if we write docker file we need to execute docker build command then docker image will create then if we run docker run command then docker container will create once docker container is created then we can start the conatiner and then we can stop the container.
+
