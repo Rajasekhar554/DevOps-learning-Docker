@@ -36,22 +36,482 @@ Once if we write docker file we need to execute docker build command then docker
 DOCKER COMMANDS
 ===============
 
-sudo systemctl docker status                          -- to check docker service is running or not
-docker images                                         -- To see the docker images on docker host
-ps -ef | grep -i "dockerd"                            -- To check the docker process
-docker run -d -p 80:80 --name nginxcon nginx          -- To run nginx as a container - first it check whether the image is available locally or not if not it will                                                              download from docker hub and eun it as a container
-docker ps                                             -- To see the running containers
-docker exec -it nginxcon /bin/bash                    -- To go inside running container
-docker logs 369b197ee9ce                              -- To see logs of a ruuning container
-docker inspect 369b197ee9ce                           -- To see the details of a container
-docker rm nginxcon                                    -- To remove stopped container
-docker stop nginxcon                                  -- To stop the running container
-docker ps -a                                          -- To check all containers including stopped containers
-docker rmi f9ea18bfa4fa                               -- To delete an image
-docker rm -f 369b197ee9ce                             -- To delete running container forcefully
-docker run -d -p 80:80 --name tomcatcon tomcat:latest -- To start tomcat as a container
+# 🐳 Docker Commands Cheat Sheet
+
+A collection of commonly used Docker commands for managing the Docker service, images, containers, logs, and troubleshooting.
+
+---
+
+## 1. Docker Service Management
+
+### Check Docker Service Status
+
+```bash
+sudo systemctl status docker
+```
+
+**Description:**
+Checks whether the Docker service is running, stopped, or failed.
+
+> Note: The correct command is `sudo systemctl status docker`, not `sudo systemctl docker status`.
+
+---
+
+## 2. Docker Images
+
+### List Docker Images
+
+```bash
+docker images
+```
+
+**Description:**
+Displays all Docker images available locally on the Docker host.
+
+Example:
+
+```text
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+nginx        latest    f9ea18bfa4fa   2 weeks ago   192MB
+tomcat       latest    abc123456789   3 weeks ago   680MB
+```
+
+---
+
+## 3. Check Docker Daemon Process
+
+```bash
+ps -ef | grep -i "dockerd"
+```
+
+**Description:**
+Checks whether the Docker daemon (`dockerd`) process is running.
+
+The Docker daemon is responsible for managing Docker containers, images, networks, and volumes.
+
+---
+
+# 🚀 Docker Containers
+
+## 4. Run an Nginx Container
+
+```bash
+docker run -d -p 80:80 --name nginxcon nginx
+```
+
+**Description:**
+Runs an Nginx container in detached mode.
+
+### What happens?
+
+1. Docker checks whether the `nginx` image is available locally.
+2. If the image is not available, Docker pulls it from Docker Hub.
+3. Docker creates a container named `nginxcon`.
+4. The container runs in the background.
+5. Host port `80` is mapped to container port `80`.
+
+### Options Explained
+
+| Option            | Meaning                              |
+| ----------------- | ------------------------------------ |
+| `docker run`      | Create and start a container         |
+| `-d`              | Run in detached/background mode      |
+| `-p 80:80`        | Map host port 80 → container port 80 |
+| `--name nginxcon` | Assign a name to the container       |
+| `nginx`           | Docker image to use                  |
+
+---
+
+## 5. List Running Containers
+
+```bash
+docker ps
+```
+
+**Description:**
+Displays currently running Docker containers.
+
+---
+
+## 6. List All Containers
+
+```bash
+docker ps -a
+```
+
+**Description:**
+Displays all containers, including both running and stopped containers.
+
+---
+
+# 🔧 Working Inside Containers
+
+## 7. Access a Running Container
+
+```bash
+docker exec -it nginxcon /bin/bash
+```
+
+**Description:**
+Opens an interactive Bash shell inside the running `nginxcon` container.
+
+### Options Explained
+
+| Option        | Meaning                                      |
+| ------------- | -------------------------------------------- |
+| `docker exec` | Execute a command inside a running container |
+| `-i`          | Keep STDIN open                              |
+| `-t`          | Allocate a terminal                          |
+| `nginxcon`    | Container name                               |
+| `/bin/bash`   | Start Bash shell                             |
+
+### Example
+
+```bash
+docker exec -it nginxcon /bin/bash
+```
+
+Once inside:
+
+```bash
+ls
+ps
+pwd
+```
+
+Exit the container:
+
+```bash
+exit
+```
+
+---
+
+# 📋 Docker Logs
+
+## 8. Check Container Logs
+
+Using the container name:
+
+```bash
+docker logs nginxcon
+```
+
+Or using the container ID:
+
+```bash
+docker logs 369b197ee9ce
+```
+
+**Description:**
+Displays the logs generated by a Docker container.
+
+### Follow logs in real time
+
+```bash
+docker logs -f nginxcon
+```
+
+This is useful for troubleshooting application startup and runtime issues.
+
+---
+
+# 🔍 Docker Container Inspection
+
+## 9. Inspect a Container
+
+```bash
+docker inspect 369b197ee9ce
+```
+
+Or:
+
+```bash
+docker inspect nginxcon
+```
+
+**Description:**
+Displays detailed information about a container in JSON format.
+
+It can provide information such as:
+
+* Container ID
+* Image
+* IP address
+* Port mappings
+* Environment variables
+* Mounts
+* Network configuration
+* Container state
+
+---
+
+# 🛑 Stopping Containers
+
+## 10. Stop a Running Container
+
+```bash
+docker stop nginxcon
+```
+
+**Description:**
+Gracefully stops the running `nginxcon` container.
+
+Check the container:
+
+```bash
+docker ps -a
+```
+
+The container will appear with a status similar to:
+
+```text
+Exited (0)
+```
+
+---
+
+# 🗑️ Removing Containers
+
+## 11. Remove a Stopped Container
+
+```bash
+docker rm nginxcon
+```
+
+**Description:**
+Removes a stopped Docker container.
+
+> A running container normally cannot be removed using `docker rm`.
+
+---
+
+## 12. Forcefully Remove a Running Container
+
+```bash
+docker rm -f 369b197ee9ce
+```
+
+**Description:**
+Stops and removes the container forcefully.
+
+You can also use the container name:
+
+```bash
+docker rm -f nginxcon
+```
+
+---
+
+# 🖼️ Docker Images Management
+
+## 13. Remove a Docker Image
+
+```bash
+docker rmi f9ea18bfa4fa
+```
+
+**Description:**
+Removes a Docker image from the local Docker host.
+
+You can also remove an image using its repository and tag:
+
+```bash
+docker rmi nginx:latest
+```
+
+> The image cannot normally be removed if it is being used by an existing container.
+
+---
+
+# 🐈 Running Tomcat
+
+## 14. Run Tomcat Container
+
+```bash
+docker run -d -p 80:80 --name tomcatcon tomcat:latest
+```
+
+**Description:**
+Creates and starts a Tomcat container using the `tomcat:latest` image.
+
+However, **Tomcat normally listens on port `8080` inside the container**, so the recommended port mapping is:
+
+```bash
+docker run -d -p 8080:8080 --name tomcatcon tomcat:latest
+```
+
+Now:
+
+```text
+Host Port       Container Port
+    8080   --->      8080
+```
+
+You can verify the container:
+
+```bash
+docker ps
+```
+
+---
+
+## 15. Check Tomcat Logs
+
+```bash
 docker logs tomcatcon
+```
 
+**Description:**
+Displays the Tomcat container logs.
 
+To continuously monitor the logs:
 
+```bash
+docker logs -f tomcatcon
+```
 
+---
+
+# 📌 Quick Docker Command Reference
+
+| Command                                 | Purpose                      |
+| --------------------------------------- | ---------------------------- |
+| `sudo systemctl status docker`          | Check Docker service         |
+| `docker images`                         | List Docker images           |
+| `ps -ef \| grep -i dockerd`             | Check Docker daemon          |
+| `docker run`                            | Create and start a container |
+| `docker ps`                             | List running containers      |
+| `docker ps -a`                          | List all containers          |
+| `docker exec -it <container> /bin/bash` | Enter a running container    |
+| `docker logs <container>`               | View container logs          |
+| `docker logs -f <container>`            | Follow container logs        |
+| `docker inspect <container>`            | Inspect container details    |
+| `docker stop <container>`               | Stop a container             |
+| `docker rm <container>`                 | Remove a stopped container   |
+| `docker rm -f <container>`              | Force remove a container     |
+| `docker rmi <image>`                    | Remove an image              |
+
+---
+
+# 🔄 Common Docker Workflow
+
+A typical Docker workflow looks like this:
+
+```text
+Docker Image
+     |
+     | docker run
+     ↓
+Docker Container
+     |
+     ├── docker ps
+     ├── docker logs
+     ├── docker exec
+     ├── docker inspect
+     |
+     | docker stop
+     ↓
+Stopped Container
+     |
+     | docker rm
+     ↓
+Container Removed
+```
+
+### Example: Complete Nginx Workflow
+
+```bash
+# Check Docker
+sudo systemctl status docker
+
+# Check images
+docker images
+
+# Run Nginx
+docker run -d -p 80:80 --name nginxcon nginx
+
+# Check running containers
+docker ps
+
+# Check logs
+docker logs nginxcon
+
+# Enter container
+docker exec -it nginxcon /bin/bash
+
+# Exit container
+exit
+
+# Stop container
+docker stop nginxcon
+
+# Check all containers
+docker ps -a
+
+# Remove container
+docker rm nginxcon
+
+# Check images
+docker images
+
+# Remove image
+docker rmi nginx:latest
+```
+
+---
+
+## ⭐ Important Docker Concepts
+
+### Image
+
+A **Docker image** is a read-only template used to create containers.
+
+Example:
+
+```bash
+nginx:latest
+```
+
+### Container
+
+A **container** is a running instance of a Docker image.
+
+Example:
+
+```text
+nginx image
+     ↓
+nginxcon container
+```
+
+### Docker Daemon
+
+The Docker daemon (`dockerd`) is the background service responsible for managing Docker objects.
+
+```bash
+ps -ef | grep -i dockerd
+```
+
+### Port Mapping
+
+```bash
+-p HOST_PORT:CONTAINER_PORT
+```
+
+Example:
+
+```bash
+-p 8080:8080
+```
+
+means:
+
+```text
+Docker Host :8080
+       |
+       ↓
+Container :8080
+```
+
+---
